@@ -1,0 +1,1062 @@
+// The exported code uses Tailwind CSS. Install Tailwind CSS in your dev environment to ensure all styles work.
+import React, { useState, useEffect } from 'react';
+import * as echarts from 'echarts';
+const App: React.FC = () => {
+const [isMenuCollapsed, setIsMenuCollapsed] = useState(false);
+const [activeTab, setActiveTab] = useState('dashboard');
+const [selectedFilter, setSelectedFilter] = useState('7 ngày');
+const [isNotificationOpen, setIsNotificationOpen] = useState(false);
+const [isProfileOpen, setIsProfileOpen] = useState(false);
+const [showAdvancedFilter, setShowAdvancedFilter] = useState(false);
+const [selectedRole, setSelectedRole] = useState('Admin');
+const [isRoleDropdownOpen, setIsRoleDropdownOpen] = useState(false);
+// Role-based demo data
+const roleBasedData = {
+Admin: {
+revenue: '1.25 tỷ đ',
+revenueKPI: '1.5 tỷ đ',
+revenuePercent: '83%',
+customers: '254',
+customersKPI: '300',
+customersPercent: '85%',
+conversion: '24.5%',
+opportunities: '42',
+kpi: '98%',
+tasks: [
+{ task: 'Gọi điện cho khách hàng ABC', assignee: 'Nguyễn Thành', deadline: '04/06/2025', status: 'Đang thực hiện', priority: 'Cao' },
+{ task: 'Gửi báo giá cho khách hàng XYZ', assignee: 'Trần Minh', deadline: '05/06/2025', status: 'Chưa bắt đầu', priority: 'Trung bình' },
+{ task: 'Chuẩn bị tài liệu cho cuộc họp', assignee: 'Lê Hương', deadline: '06/06/2025', status: 'Đang thực hiện', priority: 'Cao' },
+{ task: 'Cập nhật thông tin khách hàng', assignee: 'Phạm Anh', deadline: '07/06/2025', status: 'Chưa bắt đầu', priority: 'Thấp' },
+{ task: 'Theo dõi đơn hàng #12345', assignee: 'Nguyễn Thành', deadline: '08/06/2025', status: 'Đang thực hiện', priority: 'Trung bình' }
+]
+},
+CEO: {
+revenue: '1.25 tỷ đ',
+revenueKPI: '1.5 tỷ đ',
+revenuePercent: '83%',
+customers: '254',
+customersKPI: '300',
+customersPercent: '85%',
+conversion: '24.5%',
+opportunities: '42',
+kpi: '95%',
+tasks: [
+{ task: 'Review báo cáo tháng', assignee: 'Nguyễn CEO', deadline: '04/06/2025', status: 'Đang thực hiện', priority: 'Cao' },
+{ task: 'Họp ban lãnh đạo', assignee: 'Nguyễn CEO', deadline: '05/06/2025', status: 'Chưa bắt đầu', priority: 'Cao' },
+{ task: 'Phê duyệt kế hoạch Q3', assignee: 'Nguyễn CEO', deadline: '06/06/2025', status: 'Đang thực hiện', priority: 'Cao' }
+]
+},
+Leader: {
+revenue: '420.5 triệu đ',
+revenueKPI: '500 triệu đ',
+revenuePercent: '84%',
+customers: '85',
+customersKPI: '100',
+customersPercent: '85%',
+conversion: '22.3%',
+opportunities: '15',
+kpi: '87%',
+tasks: [
+{ task: 'Họp team sales Nhóm A', assignee: 'Trần Leader', deadline: '04/06/2025', status: 'Đang thực hiện', priority: 'Cao' },
+{ task: 'Review KPI nhóm', assignee: 'Trần Leader', deadline: '05/06/2025', status: 'Chưa bắt đầu', priority: 'Trung bình' },
+{ task: 'Phân công leads mới', assignee: 'Trần Leader', deadline: '06/06/2025', status: 'Đang thực hiện', priority: 'Cao' }
+]
+},
+Sale: {
+revenue: '125.2 triệu đ',
+revenueKPI: '150 triệu đ',
+revenuePercent: '83%',
+customers: '28',
+customersKPI: '35',
+customersPercent: '80%',
+conversion: '18.5%',
+opportunities: '8',
+kpi: '82%',
+tasks: [
+{ task: 'Gọi điện cho KH mới', assignee: 'Lê Sale', deadline: '04/06/2025', status: 'Đang thực hiện', priority: 'Cao' },
+{ task: 'Gửi báo giá dự án A', assignee: 'Lê Sale', deadline: '05/06/2025', status: 'Chưa bắt đầu', priority: 'Trung bình' }
+]
+}
+};
+const roles = [
+{
+icon: '👑',
+label: 'Admin',
+desc: 'Toàn quyền',
+menus: ['dashboard', 'leads', 'customers', 'orders', 'products', 'tasks', 'calendar', 'employees', 'kpis', 'marketing', 'reports', 'settings'],
+permissions: ['view', 'edit', 'system', 'automation', 'import_export']
+},
+{
+icon: '🏢',
+label: 'CEO',
+desc: 'Xem tất cả',
+menus: ['dashboard', 'leads', 'customers', 'orders', 'products', 'tasks', 'calendar', 'employees', 'kpis', 'marketing', 'reports', 'settings'],
+permissions: ['view']
+},
+{
+icon: '👥',
+label: 'Leader',
+desc: 'Nhóm A',
+menus: ['dashboard', 'leads', 'customers', 'orders', 'products', 'tasks', 'calendar', 'employees', 'kpis', 'marketing', 'reports'],
+permissions: ['view', 'assign_team']
+},
+{
+icon: '👤',
+label: 'Sale',
+desc: 'Cá nhân',
+menus: ['dashboard', 'leads', 'customers', 'orders', 'tasks', 'calendar', 'reports'],
+permissions: ['view_own']
+}
+];
+useEffect(() => {
+// Sales Pipeline Chart
+const salesPipelineChart = echarts.init(document.getElementById('salesPipelineChart'));
+const salesPipelineOption = {
+animation: false,
+tooltip: {
+trigger: 'axis',
+axisPointer: {
+type: 'shadow'
+}
+},
+legend: {
+data: ['Tiềm năng', 'Đàm phán', 'Đề xuất', 'Chốt']
+},
+grid: {
+left: '3%',
+right: '4%',
+bottom: '3%',
+containLabel: true
+},
+xAxis: {
+type: 'value',
+boundaryGap: [0, 0.01]
+},
+yAxis: {
+type: 'category',
+data: ['T1', 'T2', 'T3', 'T4', 'T5', 'T6']
+},
+series: [
+{
+name: 'Tiềm năng',
+type: 'bar',
+data: [18, 23, 29, 15, 19, 33],
+color: '#4791FF'
+},
+{
+name: 'Đàm phán',
+type: 'bar',
+data: [12, 17, 15, 13, 10, 13],
+color: '#36CBCB'
+},
+{
+name: 'Đề xuất',
+type: 'bar',
+data: [10, 12, 11, 8, 7, 9],
+color: '#FFC555'
+},
+{
+name: 'Chốt',
+type: 'bar',
+data: [5, 8, 7, 6, 5, 6],
+color: '#5ECC5E'
+}
+]
+};
+salesPipelineChart.setOption(salesPipelineOption);
+// Tasks Overview Chart
+const tasksOverviewChart = echarts.init(document.getElementById('tasksOverviewChart'));
+const tasksOverviewOption = {
+animation: false,
+tooltip: {
+trigger: 'axis'
+},
+legend: {
+data: ['Đã hoàn thành', 'Đang thực hiện']
+},
+grid: {
+left: '3%',
+right: '4%',
+bottom: '3%',
+containLabel: true
+},
+xAxis: {
+type: 'category',
+boundaryGap: false,
+data: ['T2', 'T3', 'T4', 'T5', 'T6', 'T7', 'CN']
+},
+yAxis: {
+type: 'value'
+},
+series: [
+{
+name: 'Đã hoàn thành',
+type: 'line',
+stack: 'Total',
+data: [12, 13, 10, 13, 9, 23, 21],
+color: '#5ECC5E'
+},
+{
+name: 'Đang thực hiện',
+type: 'line',
+stack: 'Total',
+data: [22, 18, 19, 23, 29, 33, 31],
+color: '#4791FF'
+}
+]
+};
+tasksOverviewChart.setOption(tasksOverviewOption);
+// Resize charts when window size changes
+const handleResize = () => {
+salesPipelineChart.resize();
+tasksOverviewChart.resize();
+};
+window.addEventListener('resize', handleResize);
+return () => {
+window.removeEventListener('resize', handleResize);
+salesPipelineChart.dispose();
+tasksOverviewChart.dispose();
+};
+}, []);
+return (
+<div className="flex h-screen max-w-[1920px] mx-auto bg-gray-50 text-gray-800 overflow-hidden">
+{/* Sidebar Navigation */}
+<div className={`bg-white border-r border-gray-200 transition-all duration-300 ease-in-out ${isMenuCollapsed ? 'w-16' : 'w-64'}`}>
+{/* Header */}
+<div className="flex items-center justify-between h-16 px-4 border-b border-gray-200">
+<div className="flex items-center">
+{!isMenuCollapsed && (
+<div className="flex items-center">
+<span className="text-2xl font-bold text-blue-600 mr-2">V</span>
+<span className="text-xl font-bold text-gray-800">iLead CRM</span>
+</div>
+)}
+{isMenuCollapsed && (
+<span className="text-2xl font-bold text-blue-600">V</span>
+)}
+</div>
+<div className="flex items-center">
+<button className="md:hidden p-2 text-gray-500 hover:text-gray-700 cursor-pointer !rounded-button whitespace-nowrap">
+<i className="fas fa-times"></i>
+</button>
+<button
+onClick={() => setIsMenuCollapsed(!isMenuCollapsed)}
+className="hidden md:block p-2 rounded-full hover:bg-gray-100 cursor-pointer !rounded-button whitespace-nowrap"
+>
+<i className={`fas ${isMenuCollapsed ? 'fa-chevron-right' : 'fa-chevron-left'} text-gray-500`}></i>
+</button>
+</div>
+</div>
+{/* Role Description */}
+<div className="px-4 py-3 border-b border-gray-200 bg-gray-50">
+{!isMenuCollapsed && (
+<p className="text-sm text-gray-600">Admin Dashboard</p>
+)}
+</div>
+{/* Role Switcher */}
+<div className="px-4 py-3 border-b border-gray-200">
+{!isMenuCollapsed && (
+<div>
+<label className="text-xs font-medium text-gray-500 block mb-2">Quyền truy cập</label>
+<div className="relative">
+<button
+onClick={() => setIsRoleDropdownOpen(!isRoleDropdownOpen)}
+className="flex items-center w-full p-2 rounded-lg hover:bg-gray-100 transition-colors cursor-pointer !rounded-button whitespace-nowrap"
+>
+<span className="text-lg mr-2">{roles.find(r => r.label === selectedRole)?.icon || '👑'}</span>
+<div className="text-left flex-1">
+<p className="text-sm font-medium text-gray-800">{roles.find(r => r.label === selectedRole)?.label || 'Admin'}</p>
+<p className="text-xs text-gray-500">{roles.find(r => r.label === selectedRole)?.desc || 'Toàn quyền'}</p>
+</div>
+<i className={`fas fa-chevron-down text-gray-400 transition-transform ${isRoleDropdownOpen ? 'transform rotate-180' : ''}`}></i>
+</button>
+{isRoleDropdownOpen && (
+<div className="absolute top-full left-0 right-0 mt-1 bg-white border border-gray-200 rounded-lg shadow-lg z-50">
+{roles.map((role, index) => (
+<button
+key={index}
+onClick={() => {
+setSelectedRole(role.label);
+setIsRoleDropdownOpen(false);
+}}
+className="flex items-center w-full p-2 hover:bg-gray-100 transition-colors cursor-pointer !rounded-button whitespace-nowrap"
+>
+<span className="text-lg mr-2">{role.icon}</span>
+<div className="text-left">
+<p className="text-sm font-medium text-gray-800">{role.label}</p>
+<p className="text-xs text-gray-500">{role.desc}</p>
+<p className="text-xs text-gray-400 mt-1">
+{role.permissions.includes('view_own') ? 'Chỉ xem dữ liệu cá nhân' :
+role.permissions.includes('assign_team') ? 'Quản lý nhóm' :
+role.permissions.includes('view') ? 'Xem toàn bộ dữ liệu' : 'Toàn quyền quản trị'}
+</p>
+</div>
+</button>
+))}
+</div>
+)}
+</div>
+</div>
+)}
+{isMenuCollapsed && (
+<div className="flex justify-center">
+<button
+onClick={() => setIsRoleDropdownOpen(!isRoleDropdownOpen)}
+className="p-2 rounded-full hover:bg-gray-100 cursor-pointer !rounded-button whitespace-nowrap relative"
+>
+<span className="text-lg">{roles.find(r => r.label === selectedRole)?.icon || '👑'}</span>
+{isRoleDropdownOpen && (
+<div className="absolute top-full left-0 mt-1 bg-white border border-gray-200 rounded-lg shadow-lg z-50">
+{roles.map((role, index) => (
+<button
+key={index}
+onClick={() => {
+setSelectedRole(role.label);
+setIsRoleDropdownOpen(false);
+}}
+className="flex items-center w-full p-2 hover:bg-gray-100 transition-colors cursor-pointer !rounded-button whitespace-nowrap"
+>
+<span className="text-lg">{role.icon}</span>
+</button>
+))}
+</div>
+)}
+</button>
+</div>
+)}
+</div>
+<nav className="mt-4">
+<ul>
+{[
+{ id: 'dashboard', name: 'Tổng quan', icon: 'fa-home', emoji: '🏠' },
+{ id: 'leads', name: 'Quản lý Leads', icon: 'fa-users', emoji: '👥' },
+{ id: 'customers', name: 'Quản lý Khách hàng', icon: 'fa-user', emoji: '👤' },
+{ id: 'orders', name: 'Quản lý Đơn hàng', icon: 'fa-shopping-cart', emoji: '🛒' },
+{ id: 'products', name: 'Quản lý Sản phẩm', icon: 'fa-box', emoji: '📦' },
+{ id: 'tasks', name: 'Quản lý Công việc', icon: 'fa-check-square', emoji: '✅' },
+{ id: 'calendar', name: 'Lịch', icon: 'fa-calendar', emoji: '📅' },
+{ id: 'employees', name: 'Quản lý Nhân viên', icon: 'fa-user-tie', emoji: '👨‍💼' },
+{ id: 'kpis', name: 'KPIs', icon: 'fa-bullseye', emoji: '🎯' },
+{ id: 'marketing', name: 'Marketing', icon: 'fa-bullhorn', emoji: '📢' },
+{ id: 'reports', name: 'Báo cáo', icon: 'fa-chart-bar', emoji: '📊' },
+{ id: 'settings', name: 'Cài đặt', icon: 'fa-cog', emoji: '⚙️' }
+].filter(item => {
+const currentRole = roles.find(r => r.label === selectedRole);
+return currentRole?.menus.includes(item.id);
+}).map(item => (
+<li key={item.id} className="mb-1">
+<a 
+href="https://readdy.ai/home/8cec57ee-2e4d-4ee1-b166-d77054be84cd/ea6226d9-af91-4f87-b9c7-63755bdcff12"
+data-readdy="true"
+className={`flex items-center w-full px-4 py-3 text-left transition-colors ${
+activeTab === item.id
+? 'bg-blue-50 text-blue-600 font-medium'
+: 'text-gray-600 hover:bg-gray-100'
+} cursor-pointer !rounded-button whitespace-nowrap no-underline`}
+>
+{isMenuCollapsed ? (
+<span className="text-lg">{item.emoji}</span>
+) : (
+<>
+<span className="w-6 text-lg">{item.emoji}</span>
+<span className="ml-3">{item.name}</span>
+</>
+)}
+</a>
+</li>
+))}
+</ul>
+</nav>
+</div>
+{/* Main Content */}
+<div className="flex flex-col flex-1 overflow-hidden">
+{/* Header */}
+<header className="flex items-center justify-between h-16 px-6 bg-white border-b border-gray-200 z-10">
+<div className="flex items-center">
+<h1 className="text-xl font-bold text-gray-800">Dashboard</h1>
+</div>
+{/* Search Bar */}
+<div className="flex-1 max-w-xl mx-8">
+<div className="relative">
+<input
+type="text"
+placeholder="Tìm kiếm..."
+className="w-full pl-10 pr-4 py-2 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm"
+/>
+<div className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
+<i className="fas fa-search text-gray-400"></i>
+</div>
+</div>
+</div>
+{/* User Actions */}
+<div className="flex items-center space-x-4">
+{/* Quick Add Button */}
+<div className="relative">
+<button className="p-2 text-gray-600 hover:text-blue-600 cursor-pointer !rounded-button whitespace-nowrap">
+<i className="fas fa-plus-circle text-xl"></i>
+</button>
+</div>
+{/* Notifications */}
+<div className="relative">
+<button
+onClick={() => setIsNotificationOpen(!isNotificationOpen)}
+className="p-2 text-gray-600 hover:text-blue-600 cursor-pointer !rounded-button whitespace-nowrap"
+>
+<i className="fas fa-bell text-xl"></i>
+<span className="absolute top-0 right-0 flex items-center justify-center w-5 h-5 text-xs text-white bg-red-500 rounded-full">3</span>
+</button>
+{isNotificationOpen && (
+<div className="absolute right-0 mt-2 w-80 bg-white rounded-lg shadow-lg border border-gray-200 z-50">
+<div className="p-3 border-b border-gray-200">
+<h3 className="text-lg font-semibold">Thông báo</h3>
+</div>
+<div className="max-h-80 overflow-y-auto">
+{[
+{ title: 'Cuộc họp mới', time: '10 phút trước', icon: 'fa-calendar', color: 'text-blue-500' },
+{ title: 'Nhiệm vụ đã hoàn thành', time: '1 giờ trước', icon: 'fa-check-circle', color: 'text-green-500' },
+{ title: 'Khách hàng mới', time: '3 giờ trước', icon: 'fa-user-plus', color: 'text-purple-500' }
+].map((notification, index) => (
+<div key={index} className="p-3 border-b border-gray-100 hover:bg-gray-50 cursor-pointer">
+<div className="flex items-start">
+<div className={`p-2 rounded-full bg-gray-100 ${notification.color}`}>
+<i className={`fas ${notification.icon}`}></i>
+</div>
+<div className="ml-3">
+<p className="text-sm font-medium">{notification.title}</p>
+<p className="text-xs text-gray-500">{notification.time}</p>
+</div>
+</div>
+</div>
+))}
+</div>
+<div className="p-2 text-center border-t border-gray-200">
+<button className="text-sm text-blue-600 hover:text-blue-800 font-medium cursor-pointer !rounded-button whitespace-nowrap">
+Xem tất cả thông báo
+</button>
+</div>
+</div>
+)}
+</div>
+{/* User Profile */}
+<div className="relative">
+<button
+onClick={() => setIsProfileOpen(!isProfileOpen)}
+className="flex items-center space-x-2 cursor-pointer !rounded-button whitespace-nowrap"
+>
+<div className="w-8 h-8 rounded-full bg-blue-500 flex items-center justify-center text-white">
+<span className="text-sm font-medium">NT</span>
+</div>
+<span className="text-sm font-medium hidden md:block">Nguyễn Thành</span>
+<i className="fas fa-chevron-down text-xs text-gray-500"></i>
+</button>
+{isProfileOpen && (
+<div className="absolute right-0 mt-2 w-48 bg-white rounded-lg shadow-lg border border-gray-200 z-50">
+<div className="p-3 border-b border-gray-200">
+<p className="text-sm font-medium">Nguyễn Thành</p>
+<p className="text-xs text-gray-500">admin@example.com</p>
+</div>
+<div>
+{[
+{ label: 'Hồ sơ của tôi', icon: 'fa-user' },
+{ label: 'Cài đặt', icon: 'fa-cog' },
+{ label: 'Trợ giúp', icon: 'fa-question-circle' }
+].map((item, index) => (
+<button key={index} className="w-full flex items-center px-3 py-2 text-sm text-gray-700 hover:bg-gray-100 cursor-pointer !rounded-button whitespace-nowrap">
+<i className={`fas ${item.icon} w-5`}></i>
+<span>{item.label}</span>
+</button>
+))}
+</div>
+<div className="p-2 border-t border-gray-200">
+<button className="w-full flex items-center px-3 py-2 text-sm text-red-600 hover:bg-gray-100 cursor-pointer !rounded-button whitespace-nowrap">
+<i className="fas fa-sign-out-alt w-5"></i>
+<span>Đăng xuất</span>
+</button>
+</div>
+</div>
+)}
+</div>
+</div>
+</header>
+{/* Main Dashboard Content */}
+<main className="flex-1 overflow-y-auto p-6 bg-gray-50">
+{/* Dashboard Header */}
+<div className="bg-white p-6 rounded-lg shadow-sm border border-gray-200 mb-6">
+<div className="flex flex-col space-y-4">
+<div className="flex items-center justify-between">
+<div>
+<h2 className="text-2xl font-bold text-gray-800">Tổng quan</h2>
+<p className="text-gray-500">Chào mừng trở lại, Nguyễn Thành!</p>
+</div>
+<button className="px-4 py-2 bg-blue-600 text-white rounded-lg text-sm font-medium hover:bg-blue-700 cursor-pointer !rounded-button whitespace-nowrap">
+<i className="fas fa-plus mr-2"></i>
+<span>Thêm mới</span>
+</button>
+</div>
+<div className="flex flex-wrap gap-4">
+{/* Time Filter */}
+<div className="relative">
+<select
+className="appearance-none px-4 py-2 bg-white border border-gray-300 rounded-lg text-sm font-medium text-gray-700 hover:bg-gray-50 cursor-pointer pr-10 !rounded-button whitespace-nowrap"
+value={selectedFilter}
+onChange={(e) => setSelectedFilter(e.target.value)}
+>
+<option value="7 ngày">7 ngày</option>
+<option value="30 ngày">30 ngày</option>
+<option value="90 ngày">90 ngày</option>
+<option value="1 năm">1 năm</option>
+</select>
+<div className="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none">
+<i className="fas fa-chevron-down text-gray-400 text-xs"></i>
+</div>
+</div>
+{/* Sales Team Filter */}
+<div className="relative">
+<select
+className="appearance-none px-4 py-2 bg-white border border-gray-300 rounded-lg text-sm font-medium text-gray-700 hover:bg-gray-50 cursor-pointer pr-10 !rounded-button whitespace-nowrap"
+>
+<option value="all">Tất cả đội sales</option>
+<option value="teamA">Nhóm A</option>
+<option value="personal">Cá nhân</option>
+</select>
+<div className="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none">
+<i className="fas fa-chevron-down text-gray-400 text-xs"></i>
+</div>
+</div>
+{/* Advanced Filter Button */}
+<button
+onClick={() => setShowAdvancedFilter(!showAdvancedFilter)}
+className="px-4 py-2 bg-white border border-gray-300 rounded-lg text-sm font-medium text-gray-700 hover:bg-gray-50 flex items-center space-x-2 !rounded-button whitespace-nowrap"
+>
+<i className="fas fa-filter"></i>
+<span>Lọc nâng cao</span>
+</button>
+</div>
+{/* Advanced Filter Dialog */}
+{showAdvancedFilter && (
+<div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+<div className="bg-white rounded-lg p-6 w-full max-w-2xl">
+<div className="flex justify-between items-center mb-6">
+<h3 className="text-lg font-bold">Lọc nâng cao</h3>
+<button
+onClick={() => setShowAdvancedFilter(false)}
+className="text-gray-500 hover:text-gray-700 !rounded-button whitespace-nowrap"
+>
+<i className="fas fa-times"></i>
+</button>
+</div>
+<div className="space-y-4">
+{/* Custom Date Range */}
+<div className="grid grid-cols-2 gap-4">
+<div>
+<label className="block text-sm font-medium text-gray-700 mb-1">Từ ngày</label>
+<input type="date" className="w-full px-4 py-2 border border-gray-300 rounded-lg text-sm" />
+</div>
+<div>
+<label className="block text-sm font-medium text-gray-700 mb-1">Đến ngày</label>
+<input type="date" className="w-full px-4 py-2 border border-gray-300 rounded-lg text-sm" />
+</div>
+</div>
+{/* Region */}
+<div>
+<label className="block text-sm font-medium text-gray-700 mb-1">Khu vực</label>
+<select className="w-full px-4 py-2 border border-gray-300 rounded-lg text-sm">
+<option value="">Tất cả khu vực</option>
+<option value="hanoi">Hà Nội</option>
+<option value="hcm">TP.HCM</option>
+<option value="danang">Đà Nẵng</option>
+<option value="other">Khác</option>
+</select>
+</div>
+{/* Lead Source */}
+<div>
+<label className="block text-sm font-medium text-gray-700 mb-1">Nguồn lead</label>
+<select className="w-full px-4 py-2 border border-gray-300 rounded-lg text-sm">
+<option value="">Tất cả nguồn</option>
+<option value="facebook">Facebook</option>
+<option value="zalo">Zalo</option>
+<option value="google">Google Ads</option>
+<option value="manual">Thủ công</option>
+</select>
+</div>
+{/* Order Value Range */}
+<div>
+<label className="block text-sm font-medium text-gray-700 mb-1">Giá trị đơn hàng</label>
+<div className="grid grid-cols-2 gap-4">
+<input
+type="number"
+placeholder="Từ"
+className="w-full px-4 py-2 border border-gray-300 rounded-lg text-sm"
+/>
+<input
+type="number"
+placeholder="Đến"
+className="w-full px-4 py-2 border border-gray-300 rounded-lg text-sm"
+/>
+</div>
+</div>
+{/* Sales Staff */}
+<div>
+<label className="block text-sm font-medium text-gray-700 mb-1">Nhân viên sale</label>
+<select className="w-full px-4 py-2 border border-gray-300 rounded-lg text-sm">
+<option value="">Tất cả nhân viên</option>
+<option value="staff1">Nguyễn Văn A</option>
+<option value="staff2">Trần Thị B</option>
+<option value="staff3">Lê Văn C</option>
+</select>
+</div>
+</div>
+<div className="flex justify-end space-x-3 mt-6">
+<button
+onClick={() => setShowAdvancedFilter(false)}
+className="px-4 py-2 border border-gray-300 rounded-lg text-sm font-medium text-gray-700 hover:bg-gray-50 !rounded-button whitespace-nowrap"
+>
+Hủy
+</button>
+<button
+className="px-4 py-2 bg-blue-600 text-white rounded-lg text-sm font-medium hover:bg-blue-700 !rounded-button whitespace-nowrap"
+>
+Áp dụng
+</button>
+</div>
+</div>
+</div>
+)}
+</div>
+</div>
+{/* Stats Cards */}
+<div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-6">
+{/* Tổng doanh thu Card */}
+<div className="bg-white p-5 rounded-lg shadow-sm border border-gray-200">
+<div className="flex items-center justify-between">
+<div>
+<p className="text-sm font-medium text-gray-500">Tổng doanh thu</p>
+<h3 className="text-xl font-bold mt-1">{roleBasedData[selectedRole].revenue}</h3>
+<div className="flex items-center mt-2 text-green-500">
+<i className="fas fa-arrow-up mr-1 text-xs"></i>
+<span className="text-sm font-medium">+12.5%</span>
+<span className="text-xs text-gray-500 ml-1">so với tháng trước</span>
+</div>
+<div className="mt-3 flex items-center">
+<div className="w-full bg-gray-200 rounded-full h-2">
+<div
+className="bg-blue-600 h-2 rounded-full"
+style={{ width: roleBasedData[selectedRole].revenuePercent }}
+></div>
+</div>
+<span className="ml-2 text-xs font-medium text-gray-600">{roleBasedData[selectedRole].revenuePercent}</span>
+</div>
+<p className="text-xs text-gray-500 mt-1">KPI: {roleBasedData[selectedRole].revenueKPI}</p>
+</div>
+<div className="p-2.5 rounded-full bg-blue-500 text-white">
+<i className="fas fa-dollar-sign text-base"></i>
+</div>
+</div>
+</div>
+{/* Khách hàng mới Card */}
+<div className="bg-white p-5 rounded-lg shadow-sm border border-gray-200">
+<div className="flex items-center justify-between">
+<div>
+<p className="text-sm font-medium text-gray-500">Khách hàng mới</p>
+<h3 className="text-xl font-bold mt-1">{roleBasedData[selectedRole].customers}</h3>
+<div className="flex items-center mt-2 text-green-500">
+<i className="fas fa-arrow-up mr-1 text-xs"></i>
+<span className="text-sm font-medium">+18.2%</span>
+<span className="text-xs text-gray-500 ml-1">so với tháng trước</span>
+</div>
+<div className="mt-3 flex items-center">
+<div className="w-full bg-gray-200 rounded-full h-2">
+<div
+className="bg-green-500 h-2 rounded-full"
+style={{ width: roleBasedData[selectedRole].customersPercent }}
+></div>
+</div>
+<span className="ml-2 text-xs font-medium text-gray-600">{roleBasedData[selectedRole].customersPercent}</span>
+</div>
+<p className="text-xs text-gray-500 mt-1">KPI: {roleBasedData[selectedRole].customersKPI}</p>
+</div>
+<div className="p-2.5 rounded-full bg-green-500 text-white">
+<i className="fas fa-users text-base"></i>
+</div>
+</div>
+</div>
+{/* Số lượng Leads Card */}
+<div className="bg-white p-5 rounded-lg shadow-sm border border-gray-200">
+<div className="flex items-center justify-between">
+<div>
+<p className="text-sm font-medium text-gray-500">Số lượng Leads</p>
+<h3 className="text-xl font-bold mt-1">{roleBasedData[selectedRole].opportunities}</h3>
+<div className="flex items-center mt-2 text-green-500">
+<i className="fas fa-arrow-up mr-1 text-xs"></i>
+<span className="text-sm font-medium">+5.2%</span>
+<span className="text-xs text-gray-500 ml-1">so với tháng trước</span>
+</div>
+<div className="mt-3 flex items-center">
+<div className="w-full bg-gray-200 rounded-full h-2">
+<div
+className="bg-indigo-500 h-2 rounded-full"
+style={{ width: '75%' }}
+></div>
+</div>
+<span className="ml-2 text-xs font-medium text-gray-600">75%</span>
+</div>
+<p className="text-xs text-gray-500 mt-1">KPI: 50 leads</p>
+</div>
+<div className="p-2.5 rounded-full bg-indigo-500 text-white">
+<i className="fas fa-user-plus text-base"></i>
+</div>
+</div>
+</div>
+{/* Tỷ lệ chuyển đổi Card */}
+<div className="bg-white p-5 rounded-lg shadow-sm border border-gray-200">
+<div className="flex items-center justify-between">
+<div>
+<p className="text-sm font-medium text-gray-500">Tỷ lệ chuyển đổi</p>
+<h3 className="text-xl font-bold mt-1">{roleBasedData[selectedRole].conversion}</h3>
+<div className="flex items-center mt-2 text-green-500">
+<i className="fas fa-arrow-up mr-1 text-xs"></i>
+<span className="text-sm font-medium">+3.8%</span>
+<span className="text-xs text-gray-500 ml-1">so với tháng trước</span>
+</div>
+</div>
+<div className="p-2.5 rounded-full bg-purple-500 text-white">
+<i className="fas fa-chart-line text-base"></i>
+</div>
+</div>
+</div>
+</div>
+{/* Main Dashboard Widgets */}
+<div className="grid grid-cols-1 lg:grid-cols-3 gap-4 mb-6">
+{/* Sales Pipeline */}
+<div className="bg-white p-5 rounded-lg shadow-sm border border-gray-200 lg:col-span-2">
+<div className="flex items-center justify-between mb-4">
+<h3 className="text-lg font-bold">Phễu bán hàng</h3>
+<div className="flex items-center space-x-2">
+<button className="p-1 text-gray-500 hover:text-blue-600 cursor-pointer !rounded-button whitespace-nowrap">
+<i className="fas fa-sync-alt"></i>
+</button>
+<button className="p-1 text-gray-500 hover:text-blue-600 cursor-pointer !rounded-button whitespace-nowrap">
+<i className="fas fa-ellipsis-v"></i>
+</button>
+</div>
+</div>
+{/* Lead Sources Section */}
+<div className="mb-6">
+<h4 className="text-sm font-medium text-gray-700 mb-3">Nguồn Leads</h4>
+<div className="grid grid-cols-2 md:grid-cols-4 gap-3">
+{[
+{ name: 'Facebook', count: '125', rate: '24.5%', icon: 'fab fa-facebook', color: 'bg-blue-100 text-blue-600' },
+{ name: 'Google', count: '98', rate: '18.2%', icon: 'fab fa-google', color: 'bg-red-100 text-red-600' },
+{ name: 'Zalo', count: '76', rate: '15.3%', icon: 'fas fa-comment-alt', color: 'bg-blue-100 text-blue-600' },
+{ name: 'Khác', count: '42', rate: '8.7%', icon: 'fas fa-globe', color: 'bg-gray-100 text-gray-600' }
+].map((source, index) => (
+<div key={index} className="bg-white border border-gray-200 rounded-lg p-3 hover:shadow-md transition-all">
+<div className="flex items-center justify-between mb-2">
+<div className="flex items-center">
+<div className={`w-8 h-8 rounded-lg ${source.color} flex items-center justify-center mr-2`}>
+<i className={source.icon}></i>
+</div>
+<span className="font-medium text-sm">{source.name}</span>
+</div>
+<span className="text-xs text-gray-500">{source.rate}</span>
+</div>
+<div className="grid grid-cols-2 gap-2 mt-2">
+<div className="bg-blue-50 rounded p-2">
+<p className="text-xs text-gray-500">Phản hồi 24h</p>
+<p className="text-sm font-medium text-blue-600">85%</p>
+</div>
+<div className="bg-green-50 rounded p-2">
+<p className="text-xs text-gray-500">Giá trị TB</p>
+<p className="text-sm font-medium text-green-600">2.5tr</p>
+</div>
+</div>
+</div>
+))}
+</div>
+</div>
+{/* Sales Funnel Visualization */}
+<div>
+<h4 className="text-sm font-medium text-gray-700 mb-3">Phễu chuyển đổi</h4>
+<div className="relative flex flex-col items-center">
+{/* Funnel Stages */}
+{[
+{ name: 'Tiềm năng', count: 254, color: 'from-indigo-400 to-indigo-500', width: '100%', conversion: '100%' },
+{ name: 'Liên hệ', count: 186, color: 'from-blue-400 to-blue-500', width: '85%', conversion: '73.2%' },
+{ name: 'Đàm phán', count: 124, color: 'from-cyan-400 to-cyan-500', width: '70%', conversion: '48.8%' },
+{ name: 'Đề xuất', count: 68, color: 'from-teal-400 to-teal-500', width: '55%', conversion: '26.8%' },
+{ name: 'Chốt', count: 42, color: 'from-green-500 to-green-600', width: '40%', conversion: '16.5%' }
+].map((stage, index) => (
+<div key={index} className="relative w-full mb-2 group">
+<div
+className={`relative h-16 bg-gradient-to-r ${stage.color} rounded-lg mx-auto transition-all ${stage.name === 'Chốt' ? 'hover:scale-110 shadow-md' : 'hover:scale-105'} hover:shadow-lg cursor-pointer`}
+style={{ width: stage.width }}
+>
+<div className="absolute inset-0 flex items-center justify-between px-4">
+<span className="text-white font-medium">{stage.name}</span>
+<div className="flex flex-col items-end">
+<span className="text-white font-bold">{stage.count}</span>
+<span className="text-white text-xs">{stage.conversion}</span>
+</div>
+</div>
+{/* Tooltip on hover */}
+<div className="absolute opacity-0 group-hover:opacity-100 transition-opacity -top-12 left-1/2 transform -translate-x-1/2 bg-gray-800 text-white text-xs rounded py-2 px-3 z-10">
+<div className="flex flex-col">
+<span className="font-bold">{stage.count} leads</span>
+<span>Giai đoạn: {stage.name}</span>
+<span>Tỉ lệ chuyển đổi: {stage.conversion}</span>
+</div>
+<div className="absolute bottom-0 left-1/2 transform -translate-x-1/2 translate-y-1/2 w-2 h-2 bg-gray-800 rotate-45"></div>
+</div>
+</div>
+{/* Arrow connector */}
+{index < 4 && (
+<div className="absolute bottom-0 left-1/2 transform -translate-x-1/2 translate-y-1/2 text-gray-400 z-10">
+<i className="fas fa-chevron-down"></i>
+</div>
+)}
+</div>
+))}
+</div>
+{/* Conversion Rate Card */}
+<div className="mt-6 bg-blue-50 rounded-lg p-4 border border-blue-100">
+<div className="flex items-center">
+<div className="bg-blue-100 rounded-full p-3 mr-4">
+<i className="fas fa-chart-line text-blue-600"></i>
+</div>
+<div>
+<h4 className="text-lg font-bold text-blue-800">Tỷ lệ chuyển đổi tổng</h4>
+<div className="flex items-center mt-1">
+<div className="bg-white rounded-lg px-3 py-2 shadow-sm">
+<span className="text-xl font-bold text-blue-600">42.9%</span>
+</div>
+<div className="ml-3 text-sm text-blue-700">
+<p>12/28 leads thành công</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+{/* Important Notifications */}
+<div className="bg-white p-6 rounded-lg shadow-sm border border-gray-200">
+<div className="flex items-center justify-between mb-4">
+<h3 className="text-lg font-bold">Thông báo quan trọng</h3>
+<div className="flex items-center space-x-2">
+<button className="p-1 text-gray-500 hover:text-blue-600 cursor-pointer !rounded-button whitespace-nowrap">
+<i className="fas fa-sync-alt"></i>
+</button>
+<button className="p-1 text-gray-500 hover:text-blue-600 cursor-pointer !rounded-button whitespace-nowrap">
+<i className="fas fa-ellipsis-v"></i>
+</button>
+</div>
+</div>
+{/* Urgent Leads */}
+<div className="mb-6 bg-red-50 border border-red-100 rounded-lg p-4">
+<div className="flex items-start">
+<div className="bg-red-100 rounded-full p-2 mr-3">
+<i className="fas fa-exclamation-triangle text-red-600"></i>
+</div>
+<div>
+<h4 className="font-bold text-red-800">Leads cần xử lý gấp</h4>
+<p className="text-sm text-red-700 mt-1">Có 5 leads mới chưa được phản hồi trong 24h qua!</p>
+<button className="mt-2 text-sm font-medium text-red-600 hover:text-red-800 cursor-pointer !rounded-button whitespace-nowrap">
+Xem chi tiết
+</button>
+</div>
+</div>
+</div>
+{/* Urgent Orders */}
+<div className="mb-6 bg-orange-50 border border-orange-100 rounded-lg p-4">
+<div className="flex items-start">
+<div className="bg-orange-100 rounded-full p-2 mr-3">
+<i className="fas fa-shopping-cart text-orange-600"></i>
+</div>
+<div>
+<h4 className="font-bold text-orange-800">Đơn hàng cần xử lý</h4>
+<p className="text-sm text-orange-700 mt-1">3 đơn hàng đang chờ xác nhận thanh toán</p>
+<button className="mt-2 text-sm font-medium text-orange-600 hover:text-orange-800 cursor-pointer !rounded-button whitespace-nowrap">
+Xem chi tiết
+</button>
+</div>
+</div>
+</div>
+{/* Overdue Tasks */}
+<div className="mb-6 bg-purple-50 border border-purple-100 rounded-lg p-4">
+<div className="flex items-start">
+<div className="bg-purple-100 rounded-full p-2 mr-3">
+<i className="fas fa-tasks text-purple-600"></i>
+</div>
+<div>
+<h4 className="font-bold text-purple-800">Nhiệm vụ quá hạn</h4>
+<p className="text-sm text-purple-700 mt-1">2 nhiệm vụ đã quá hạn cần được xử lý</p>
+<button className="mt-2 text-sm font-medium text-purple-600 hover:text-purple-800 cursor-pointer !rounded-button whitespace-nowrap">
+Xem chi tiết
+</button>
+</div>
+</div>
+</div>
+{/* Inventory Alert */}
+<div className="mb-6 bg-blue-50 border border-blue-100 rounded-lg p-4">
+<div className="flex items-start">
+<div className="bg-blue-100 rounded-full p-2 mr-3">
+<i className="fas fa-box text-blue-600"></i>
+</div>
+<div>
+<h4 className="font-bold text-blue-800">Cảnh báo tồn kho</h4>
+<p className="text-sm text-blue-700 mt-1">4 sản phẩm sắp hết hàng cần nhập thêm</p>
+<button className="mt-2 text-sm font-medium text-blue-600 hover:text-blue-800 cursor-pointer !rounded-button whitespace-nowrap">
+Xem chi tiết
+</button>
+</div>
+</div>
+</div>
+{/* Customer Follow-up */}
+<div className="bg-green-50 border border-green-100 rounded-lg p-4">
+<div className="flex items-start">
+<div className="bg-green-100 rounded-full p-2 mr-3">
+<i className="fas fa-user-clock text-green-600"></i>
+</div>
+<div>
+<h4 className="font-bold text-green-800">Nhắc nhở theo dõi</h4>
+<p className="text-sm text-green-700 mt-1">7 khách hàng cần liên hệ lại trong tuần này</p>
+<button className="mt-2 text-sm font-medium text-green-600 hover:text-green-800 cursor-pointer !rounded-button whitespace-nowrap">
+Xem lịch hẹn
+</button>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-6">
+{/* Tasks Overview */}
+<div className="bg-white p-6 rounded-lg shadow-sm border border-gray-200 lg:col-span-2">
+<div className="flex items-center justify-between mb-6">
+<h3 className="text-lg font-bold">Tổng quan nhiệm vụ</h3>
+<div className="flex items-center space-x-2">
+<button className="p-1 text-gray-500 hover:text-blue-600 cursor-pointer !rounded-button whitespace-nowrap">
+<i className="fas fa-sync-alt"></i>
+</button>
+<button className="p-1 text-gray-500 hover:text-blue-600 cursor-pointer !rounded-button whitespace-nowrap">
+<i className="fas fa-ellipsis-v"></i>
+</button>
+</div>
+</div>
+<div id="tasksOverviewChart" style={{ height: '300px', width: '100%' }}></div>
+</div>
+{/* Recent Activities */}
+<div className="bg-white p-6 rounded-lg shadow-sm border border-gray-200">
+<div className="flex items-center justify-between mb-6">
+<h3 className="text-lg font-bold">Hoạt động gần đây</h3>
+<button className="text-sm text-blue-600 hover:text-blue-800 cursor-pointer !rounded-button whitespace-nowrap">Xem tất cả</button>
+</div>
+<div className="space-y-4">
+{[
+{ title: 'Cuộc gọi với Công ty ABC', time: '10:30 AM', icon: 'fa-phone', color: 'bg-blue-100 text-blue-600' },
+{ title: 'Email đến Khách hàng XYZ', time: 'Hôm qua', icon: 'fa-envelope', color: 'bg-purple-100 text-purple-600' },
+{ title: 'Cập nhật trạng thái cơ hội', time: 'Hôm qua', icon: 'fa-handshake', color: 'bg-green-100 text-green-600' },
+{ title: 'Thêm khách hàng mới', time: '03/06/2025', icon: 'fa-user-plus', color: 'bg-orange-100 text-orange-600' },
+{ title: 'Hoàn thành nhiệm vụ', time: '02/06/2025', icon: 'fa-check-circle', color: 'bg-teal-100 text-teal-600' }
+].map((activity, index) => (
+<div key={index} className="flex items-start">
+<div className={`p-2 rounded-full ${activity.color} mr-3`}>
+<i className={`fas ${activity.icon}`}></i>
+</div>
+<div>
+<p className="text-sm font-medium">{activity.title}</p>
+<p className="text-xs text-gray-500">{activity.time}</p>
+</div>
+</div>
+))}
+</div>
+</div>
+</div>
+{/* Upcoming Tasks */}
+<div className="bg-white p-6 rounded-lg shadow-sm border border-gray-200 mb-6">
+<div className="flex items-center justify-between mb-6">
+<h3 className="text-lg font-bold">Nhiệm vụ sắp tới</h3>
+<button className="px-4 py-2 bg-blue-600 text-white rounded-lg text-sm font-medium hover:bg-blue-700 cursor-pointer !rounded-button whitespace-nowrap">
+<i className="fas fa-plus mr-2"></i>
+<span>Thêm nhiệm vụ</span>
+</button>
+</div>
+<div className="overflow-x-auto">
+<table className="min-w-full divide-y divide-gray-200 text-sm">
+<thead className="bg-gray-50">
+<tr>
+<th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+Nhiệm vụ
+</th>
+<th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+Người phụ trách
+</th>
+<th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+Hạn chót
+</th>
+<th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+Trạng thái
+</th>
+<th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+Ưu tiên
+</th>
+<th scope="col" className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">
+Hành động
+</th>
+</tr>
+</thead>
+<tbody className="bg-white divide-y divide-gray-200">
+{roleBasedData[selectedRole].tasks.map((task, index) => (
+<tr key={index}>
+<td className="px-6 py-4 whitespace-nowrap">
+<div className="text-sm font-medium text-gray-900">{task.task}</div>
+</td>
+<td className="px-6 py-4 whitespace-nowrap">
+<div className="text-sm text-gray-500">{task.assignee}</div>
+</td>
+<td className="px-6 py-4 whitespace-nowrap">
+<div className="text-sm text-gray-500">{task.deadline}</div>
+</td>
+<td className="px-6 py-4 whitespace-nowrap">
+<span className={`px-2 inline-flex text-xs leading-5 font-semibold rounded-full ${
+task.status === 'Đang thực hiện'
+? 'bg-blue-100 text-blue-800'
+: task.status === 'Chưa bắt đầu'
+? 'bg-gray-100 text-gray-800'
+: 'bg-green-100 text-green-800'
+}`}>
+{task.status}
+</span>
+</td>
+<td className="px-6 py-4 whitespace-nowrap">
+<span className={`px-2 inline-flex text-xs leading-5 font-semibold rounded-full ${
+task.priority === 'Cao'
+? 'bg-red-100 text-red-800'
+: task.priority === 'Trung bình'
+? 'bg-yellow-100 text-yellow-800'
+: 'bg-green-100 text-green-800'
+}`}>
+{task.priority}
+</span>
+</td>
+<td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+<div className="flex items-center justify-end space-x-2">
+<button className="text-blue-600 hover:text-blue-900 cursor-pointer !rounded-button whitespace-nowrap">
+<i className="fas fa-edit"></i>
+</button>
+<button className="text-red-600 hover:text-red-900 cursor-pointer !rounded-button whitespace-nowrap">
+<i className="fas fa-trash"></i>
+</button>
+</div>
+</td>
+</tr>
+))}
+</tbody>
+</table>
+</div>
+</div>
+</main>
+</div>
+</div>
+);
+};
+export default App

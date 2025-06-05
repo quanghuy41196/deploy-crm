@@ -1,0 +1,203 @@
+List Menu Sidebar
+
+Mục chính	Mục con theo vai trò
+Tổng quan	Sale: Dashboard cá nhân (leads, đơn của tôi)
+Trưởng phòng sale: Dashboard đội (leads, đơn đội)
+CEO: Dashboard công ty (doanh số, KPI)
+Admin: Tất cả dashboard
+Quản lý Leads	Sale: Leads của tôi, Leads mới
+Trưởng phòng sale: Leads của đội, Leads mới
+CEO: Không truy cập
+Admin: Tất cả leads, Leads mới
+Theo dõi Leads	Sale: Tiến trình của tôi, Tiến trình mới
+Trưởng phòng sale: Tiến trình của đội, Tiến trình mới
+CEO: Không truy cập
+Admin: Tất cả tiến trình, Tiến trình mới
+Khách hàng	Sale: Khách hàng của tôi
+Trưởng phòng sale: Khách hàng của đội
+CEO: Không truy cập
+Admin: Tất cả khách hàng
+Báo cáo	Sale: Hiệu suất cá nhân
+Trưởng phòng sale: Hiệu suất đội, Quy trình bán hàng
+CEO: Báo cáo công ty, KPI tổng quan
+Admin: Tất cả báo cáo, Báo cáo tùy chỉnh
+Marketing	Sale: Không truy cập
+Trưởng phòng sale: Chiến dịch, Leads từ Marketing
+CEO: Tổng quan chiến dịch, ROI Marketing
+Admin: Tất cả chiến dịch, Leads từ Marketing
+Tích hợp	Sale: Không truy cập
+Trưởng phòng sale: Xem trạng thái tích hợp
+CEO: Tổng quan tích hợp
+Admin: Quản lý tích hợp
+Cài đặt	Sale: Không truy cập
+Trưởng phòng sale: Cài đặt đội, AI đội (nhắc nhở, gợi ý)
+CEO: Cài đặt công ty, AI báo cáo
+Admin: Quản lý người dùng, Cấu hình hệ thống, AI toàn bộ
+Mô tả Giao diện Menu Sidebar (Desktop)
+1. Thiết kế Tổng quan
+Vị trí: Cố định bên trái, rộng 250px, nền xám nhạt (#F5F6FA), sạch sẽ, chuyên nghiệp, tương tự HubSpot.
+Biểu tượng: Material Icons, 24x24px, màu xanh đậm (#0052CC) để dễ nhận diện.
+Chữ: Font Roboto, 14px (mục chính), 12px (mục con), màu đen (#333333), hỗ trợ tiếng Việt.
+Tương tác:
+Hover: Nền chuyển xanh nhạt (#E6F0FA), chữ đậm (font-weight: 500 → 700), biểu tượng sáng (brightness 110%), tooltip xuất hiện sau 0.5s (nền trắng #FFFFFF, viền xám #E0E0E0, chữ đen 12px, tối đa 50 ký tự).
+Khi chọn: Viền trái xanh đậm (#0052CC, 3px), nền xanh nhạt (#E6F0FA), chữ đậm (font-weight: 700), mục con hiển thị (thụt lề 10px, nền trắng, chữ 12px).
+Hiệu ứng: Chuyển màu mượt (transition 0.2s), tooltip xuất hiện sau 0.5s, viền trái xuất hiện tức thì.
+2. Mô tả Chi tiết Từng Tính năng Sidebar
+2.1. Tổng quan
+Mô tả: Cung cấp cái nhìn tổng quan về KPI và biểu đồ, giúp người dùng nắm bắt tình hình công việc nhanh chóng.
+Giao diện:
+Biểu tượng 🏠 (24x24px, xanh đậm #0052CC), tên “Tổng quan” (14px, đen #333333).
+Mục con (thụt lề 10px): Dashboard cá nhân (Sale), Dashboard đội (Trưởng phòng sale), Dashboard công ty (CEO), Tất cả dashboard (Admin).
+Hover:
+Nền chuyển xanh nhạt (#E6F0FA), chữ đậm (font-weight: 500 → 700), biểu tượng sáng (brightness 110%).
+Tooltip: “Tổng quan: Xem KPI, biểu đồ” (nền trắng, chữ đen, 50 ký tự).
+Mục con hover: Nền xanh nhạt (#E6F0FA), chữ đậm (font-weight: 400 → 600), tooltip (ví dụ: “Dashboard cá nhân: Leads, đơn của bạn”).
+Khi chọn:
+Mục chính: Viền trái xanh đậm (#0052CC, 3px), nền xanh nhạt (#E6F0FA), chữ đậm (font-weight: 700).
+Mục con (Dashboard cá nhân): Nền xanh nhạt nhạt hơn (#EBF5FF), chữ đậm (font-weight: 600).
+Hiệu ứng: Chuyển màu mượt (transition 0.2s), mục con hiển thị.
+Phân quyền:
+Sale: Chỉ thấy “Dashboard cá nhân”.
+Trưởng phòng sale: Chỉ thấy “Dashboard đội”.
+CEO: Chỉ thấy “Dashboard công ty”.
+Admin: Thấy tất cả mục con.
+2.2. Quản lý Leads
+Mô tả: Quản lý leads từ Zalo OA và Facebook Fanpage, hỗ trợ xem, lọc leads theo trạng thái, nguồn, và nhãn.
+Giao diện:
+Biểu tượng 🧑‍🤝‍🧑 (24x24px, xanh đậm #0052CC), tên “Quản lý Leads” (14px, đen #333333).
+Mục con (thụt lề 10px): Leads của tôi (Sale), Leads của đội (Trưởng phòng sale), Tất cả leads (Admin), Leads mới.
+Hover:
+Nền chuyển xanh nhạt (#E6F0FA), chữ đậm (font-weight: 500 → 700), biểu tượng sáng (brightness 110%).
+Tooltip: “Quản lý Leads: Quản lý leads từ Zalo OA” (nền trắng, chữ đen, 50 ký tự).
+Mục con hover: Nền xanh nhạt (#E6F0FA), chữ đậm (font-weight: 400 → 600), tooltip (ví dụ: “Leads của tôi: Xem leads cá nhân”).
+Khi chọn:
+Mục chính: Viền trái xanh đậm (#0052CC, 3px), nền xanh nhạt (#E6F0FA), chữ đậm (font-weight: 700).
+Mục con (Leads của tôi): Nền xanh nhạt nhạt hơn (#EBF5FF), chữ đậm (font-weight: 600).
+Hiệu ứng: Chuyển màu mượt (transition 0.2s), mục con hiển thị.
+Phân quyền:
+Sale: Chỉ thấy “Leads của tôi”, “Leads mới”.
+Trưởng phòng sale: Chỉ thấy “Leads của đội”, “Leads mới”.
+CEO: Không truy cập.
+Admin: Thấy tất cả mục con.
+2.3. Theo dõi Leads
+Mô tả: Theo dõi tiến trình bán hàng của leads, dự đoán khả năng chốt deal (AI), xem chi tiết giai đoạn bán (Tư vấn, Chốt Deal, Ký hợp đồng).
+Giao diện:
+Biểu tượng 💼 (24x24px, xanh đậm #0052CC), tên “Theo dõi Leads” (14px, đen #333333).
+Mục con (thụt lề 10px): Tiến trình của tôi (Sale), Tiến trình của đội (Trưởng phòng sale), Tất cả tiến trình (Admin), Tiến trình mới.
+Hover:
+Nền chuyển xanh nhạt (#E6F0FA), chữ đậm (font-weight: 500 → 700), biểu tượng sáng (brightness 110%).
+Tooltip: “Theo dõi Leads: Theo dõi tiến trình bán hàng” (nền trắng, chữ đen, 50 ký tự).
+Mục con hover: Nền xanh nhạt (#E6F0FA), chữ đậm (font-weight: 400 → 600), tooltip (ví dụ: “Tiến trình của tôi: Xem tiến trình cá nhân”).
+Khi chọn:
+Mục chính: Viền trái xanh đậm (#0052CC, 3px), nền xanh nhạt (#E6F0FA), chữ đậm (font-weight: 700).
+Mục con (Tiến trình của tôi): Nền xanh nhạt nhạt hơn (#EBF5FF), chữ đậm (font-weight: 600).
+Hiệu ứng: Chuyển màu mượt (transition 0.2s), mục con hiển thị.
+Phân quyền:
+Sale: Chỉ thấy “Tiến trình của tôi”, “Tiến trình mới”.
+Trưởng phòng sale: Chỉ thấy “Tiến trình của đội”, “Tiến trình mới”.
+CEO: Không truy cập.
+Admin: Thấy tất cả mục con.
+2.4. Khách hàng
+Mô tả: Quản lý thông tin khách hàng, xem lịch sử tương tác (tin nhắn Zalo/Fanpage, email), đơn hàng, hỗ trợ chăm sóc khách hàng.
+Giao diện:
+Biểu tượng 👥 (24x24px, xanh đậm #0052CC), tên “Khách hàng” (14px, đen #333333).
+Mục con (thụt lề 10px): Khách hàng của tôi (Sale), Khách hàng của đội (Trưởng phòng sale), Tất cả khách hàng (Admin).
+Hover:
+Nền chuyển xanh nhạt (#E6F0FA), chữ đậm (font-weight: 500 → 700), biểu tượng sáng (brightness 110%).
+Tooltip: “Khách hàng: Quản lý thông tin khách hàng” (nền trắng, chữ đen, 50 ký tự).
+Mục con hover: Nền xanh nhạt (#E6F0FA), chữ đậm (font-weight: 400 → 600), tooltip (ví dụ: “Khách hàng của tôi: Xem khách cá nhân”).
+Khi chọn:
+Mục chính: Viền trái xanh đậm (#0052CC, 3px), nền xanh nhạt (#E6F0FA), chữ đậm (font-weight: 700).
+Mục con (Khách hàng của tôi): Nền xanh nhạt nhạt hơn (#EBF5FF), chữ đậm (font-weight: 600).
+Hiệu ứng: Chuyển màu mượt (transition 0.2s), mục con hiển thị.
+Phân quyền:
+Sale: Chỉ thấy “Khách hàng của tôi”.
+Trưởng phòng sale: Chỉ thấy “Khách hàng của đội”.
+CEO: Không truy cập.
+Admin: Thấy tất cả mục con.
+2.5. Báo cáo
+Mô tả: Xem báo cáo về doanh số, hiệu suất sales, tỷ lệ chuyển đổi từ leads thành khách hàng, và quy trình bán hàng.
+Giao diện:
+Biểu tượng 📊 (24x24px, xanh đậm #0052CC), tên “Báo cáo” (14px, đen #333333).
+Mục con (thụt lề 10px): Hiệu suất cá nhân (Sale), Hiệu suất đội, Quy trình bán hàng (Trưởng phòng sale), Báo cáo công ty, KPI tổng quan (CEO), Tất cả báo cáo, Báo cáo tùy chỉnh (Admin).
+Hover:
+Nền chuyển xanh nhạt (#E6F0FA), chữ đậm (font-weight: 500 → 700), biểu tượng sáng (brightness 110%).
+Tooltip: “Báo cáo: Doanh số, hiệu suất, chuyển đổi” (nền trắng, chữ đen, 50 ký tự).
+Mục con hover: Nền xanh nhạt (#E6F0FA), chữ đậm (font-weight: 400 → 600), tooltip (ví dụ: “Hiệu suất cá nhân: Xem hiệu suất của bạn”).
+Khi chọn:
+Mục chính: Viền trái xanh đậm (#0052CC, 3px), nền xanh nhạt (#E6F0FA), chữ đậm (font-weight: 700).
+Mục con (Hiệu suất cá nhân): Nền xanh nhạt nhạt hơn (#EBF5FF), chữ đậm (font-weight: 600).
+Hiệu ứng: Chuyển màu mượt (transition 0.2s), mục con hiển thị.
+Phân quyền:
+Sale: Chỉ thấy “Hiệu suất cá nhân”.
+Trưởng phòng sale: Chỉ thấy “Hiệu suất đội”, “Quy trình bán hàng”.
+CEO: Chỉ thấy “Báo cáo công ty”, “KPI tổng quan”.
+Admin: Thấy tất cả mục con.
+2.6. Marketing
+Mô tả: Quản lý chiến dịch marketing (email, tin nhắn Zalo/Fanpage), form thu thập leads, và hiệu quả chiến dịch.
+Giao diện:
+Biểu tượng 📣 (24x24px, xanh đậm #0052CC), tên “Marketing” (14px, đen #333333).
+Mục con (thụt lề 10px): Chiến dịch, Leads từ Marketing (Trưởng phòng sale), Tổng quan chiến dịch, ROI Marketing (CEO), Tất cả chiến dịch, Leads từ Marketing (Admin).
+Hover:
+Nền chuyển xanh nhạt (#E6F0FA), chữ đậm (font-weight: 500 → 700), biểu tượng sáng (brightness 110%).
+Tooltip: “Marketing: Quản lý chiến dịch, form leads” (nền trắng, chữ đen, 50 ký tự).
+Mục con hover: Nền xanh nhạt (#E6F0FA), chữ đậm (font-weight: 400 → 600), tooltip (ví dụ: “Chiến dịch: Quản lý email, tin Zalo”).
+Khi chọn:
+Mục chính: Viền trái xanh đậm (#0052CC, 3px), nền xanh nhạt (#E6F0FA), chữ đậm (font-weight: 700).
+Mục con (Chiến dịch): Nền xanh nhạt nhạt hơn (#EBF5FF), chữ đậm (font-weight: 600).
+Hiệu ứng: Chuyển màu mượt (transition 0.2s), mục con hiển thị.
+Phân quyền:
+Sale: Không truy cập.
+Trưởng phòng sale: Chỉ thấy “Chiến dịch”, “Leads từ Marketing”.
+CEO: Chỉ thấy “Tổng quan chiến dịch”, “ROI Marketing”.
+Admin: Thấy tất cả mục con.
+2.7. Tích hợp
+Mô tả: Quản lý tích hợp với các hệ thống bên ngoài (Zalo OA, Facebook Fanpage, Gmail, Outlook, webhook/API).
+Giao diện:
+Biểu tượng 🔌 (24x24px, xanh đậm #0052CC), tên “Tích hợp” (14px, đen #333333).
+Mục con (thụt lề 10px): Xem trạng thái tích hợp (Trưởng phòng sale), Tổng quan tích hợp (CEO), Quản lý tích hợp (Admin).
+Hover:
+Nền chuyển xanh nhạt (#E6F0FA), chữ đậm (font-weight: 500 → 700), biểu tượng sáng (brightness 110%).
+Tooltip: “Tích hợp: Quản lý Zalo OA, Fanpage” (nền trắng, chữ đen, 50 ký tự).
+Mục con hover: Nền xanh nhạt (#E6F0FA), chữ đậm (font-weight: 400 → 600), tooltip (ví dụ: “Quản lý tích hợp: Zalo, Fanpage, Gmail”).
+Khi chọn:
+Mục chính: Viền trái xanh đậm (#0052CC, 3px), nền xanh nhạt (#E6F0FA), chữ đậm (font-weight: 700).
+Mục con (Quản lý tích hợp): Nền xanh nhạt nhạt hơn (#EBF5FF), chữ đậm (font-weight: 600).
+Hiệu ứng: Chuyển màu mượt (transition 0.2s), mục con hiển thị.
+Phân quyền:
+Sale: Không truy cập.
+Trưởng phòng sale: Chỉ thấy “Xem trạng thái tích hợp”.
+CEO: Chỉ thấy “Tổng quan tích hợp”.
+Admin: Thấy tất cả mục con.
+2.8. Cài đặt
+Mô tả: Quản lý hệ thống, phân quyền, người dùng, bảo mật, quy trình bán hàng, và các tính năng AI cơ bản (nhắc nhở, gợi ý, báo cáo, nội dung).
+Giao diện:
+Biểu tượng ⚙️ (24x24px, xanh đậm #0052CC), tên “Cài đặt” (14px, đen #333333).
+Mục con (thụt lề 10px): Cài đặt đội, AI đội (Trưởng phòng sale), Cài đặt công ty, AI báo cáo (CEO), Quản lý người dùng, Cấu hình hệ thống, AI toàn bộ (Admin).
+Hover:
+Nền chuyển xanh nhạt (#E6F0FA), chữ đậm (font-weight: 500 → 700), biểu tượng sáng (brightness 110%).
+Tooltip: “Cài đặt: Phân quyền, AI, hệ thống” (nền trắng, chữ đen, 50 ký tự).
+Mục con hover: Nền xanh nhạt (#E6F0FA), chữ đậm (font-weight: 400 → 600), tooltip (ví dụ: “AI đội: Nhắc nhở, gợi ý”).
+Khi chọn:
+Mục chính: Viền trái xanh đậm (#0052CC, 3px), nền xanh nhạt (#E6F0FA), chữ đậm (font-weight: 700).
+Mục con (Quản lý người dùng): Nền xanh nhạt nhạt hơn (#EBF5FF), chữ đậm (font-weight: 600).
+Hiệu ứng: Chuyển màu mượt (transition 0.2s), mục con hiển thị.
+Phân quyền:
+Sale: Không truy cập.
+Trưởng phòng sale: Chỉ thấy “Cài đặt đội”, “AI đội”.
+CEO: Chỉ thấy “Cài đặt công ty”, “AI báo cáo”.
+Admin: Thấy tất cả mục con.
+3. Tích hợp với Tính năng AI và Hệ thống
+AI Cơ bản (Trong Cài đặt):
+Mục con AI Cơ bản trong Cài đặt: Nhắc nhở (leads, đơn, task), gợi ý (gọi, tin Zalo), báo cáo, nội dung.
+Sidebar không hiển thị badge, thông báo AI được chuyển lên header.
+Zalo OA/Fanpage:
+Mục Tích hợp: Trạng thái kết nối (xanh: kết nối, đỏ: lỗi).
+Nhấn “Zalo OA”: Xem leads/tin nhắn đồng bộ, gửi tin từ CRM.
+Bảo mật và Phân quyền:
+Sale: Tổng quan, Quản lý Leads, Theo dõi Leads, Khách hàng, Báo cáo cá nhân.
+Trưởng phòng sale: Thêm Báo cáo đội, Quy trình bán hàng, Marketing, Cài đặt đội.
+CEO: Tổng quan công ty, Báo cáo công ty, Marketing, Cài đặt công ty.
+Admin: Toàn quyền, bao gồm Quản lý người dùng, AI Cơ bản.
+Trạng thái hóa đơn:
+Sidebar hỗ trợ truy cập nhanh đến mục liên quan (Quản lý Leads, Theo dõi Leads) để xử lý leads, đơn theo trạng thái (Đã thanh toán, Chưa thanh toán, Chờ hợp đồng).

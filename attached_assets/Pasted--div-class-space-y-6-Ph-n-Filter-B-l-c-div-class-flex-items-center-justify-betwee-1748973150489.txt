@@ -1,0 +1,94 @@
+<div class="space-y-6">
+  <!-- Phần Filter/Bộ lọc -->
+  <div class="flex items-center justify-between bg-white p-4 rounded-lg shadow-sm">
+    <div class="space-x-2">
+      <button class="px-4 py-2 rounded-lg bg-blue-100 text-blue-600">7 ngày</button>
+      <button class="px-4 py-2 rounded-lg hover:bg-gray-100">30 ngày</button>
+      <button class="px-4 py-2 rounded-lg hover:bg-gray-100">90 ngày</button>
+      <button class="px-4 py-2 rounded-lg hover:bg-gray-100">Tùy chọn</button>
+    </div>
+  </div>
+
+  <!-- Phần Thống kê tổng quan -->
+  <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+    <!-- Card Doanh thu -->
+    <div class="bg-white p-6 rounded-lg shadow-sm">
+      <h3 class="text-gray-500 capitalize">Doanh thu</h3>
+      <div class="mt-2 flex items-end justify-between">
+        <div>
+          <p class="text-2xl font-semibold">1.25 tỷ đ</p>
+          <p class="text-sm text-gray-500">Mục tiêu: 1.5 tỷ đ</p>
+        </div>
+        <div class="flex items-center">
+          <div class="h-2 w-20 bg-gray-200 rounded-full overflow-hidden">
+            <div class="h-full bg-blue-600 rounded-full" style="width: 83%"></div>
+          </div>
+          <span class="ml-2 text-sm font-medium">83%</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Card Khách hàng (tương tự như card Doanh thu) -->
+    <div class="bg-white p-6 rounded-lg shadow-sm">
+      <!-- Nội dung tương tự -->
+    </div>
+
+    <!-- Card Leads (tương tự như card Doanh thu) -->
+    <div class="bg-white p-6 rounded-lg shadow-sm">
+      <!-- Nội dung tương tự -->
+    </div>
+
+    <!-- Card Công việc (tương tự như card Doanh thu) -->
+    <div class="bg-white p-6 rounded-lg shadow-sm">
+      <!-- Nội dung tương tự -->
+    </div>
+  </div>
+
+  <!-- Phần Bảng công việc gần đây -->
+  <div class="bg-white rounded-lg shadow-sm">
+    <div class="p-4 border-b">
+      <h2 class="text-lg font-semibold">Công việc gần đây</h2>
+    </div>
+    <div class="overflow-x-auto">
+      <table class="w-full">
+        <thead class="bg-gray-50">
+          <tr>
+            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+              Công việc
+            </th>
+            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+              Người thực hiện
+            </th>
+            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+              Hạn chót
+            </th>
+            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+              Trạng thái
+            </th>
+            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+              Độ ưu tiên
+            </th>
+          </tr>
+        </thead>
+        <tbody class="bg-white divide-y divide-gray-200">
+          <tr class="hover:bg-gray-50 cursor-pointer">
+            <td class="px-6 py-4 whitespace-nowrap">Gọi điện cho khách hàng ABC</td>
+            <td class="px-6 py-4 whitespace-nowrap">Nguyễn Thành</td>
+            <td class="px-6 py-4 whitespace-nowrap">04/06/2025</td>
+            <td class="px-6 py-4 whitespace-nowrap">
+              <span class="px-2 py-1 text-xs rounded-full bg-blue-100 text-blue-800">
+                Đang thực hiện
+              </span>
+            </td>
+            <td class="px-6 py-4 whitespace-nowrap">
+              <span class="px-2 py-1 text-xs rounded-full bg-red-100 text-red-800">
+                Cao
+              </span>
+            </td>
+          </tr>
+          <!-- Các dòng khác tương tự -->
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>

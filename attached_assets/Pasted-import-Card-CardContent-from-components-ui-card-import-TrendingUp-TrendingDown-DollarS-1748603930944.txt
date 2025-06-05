@@ -1,0 +1,81 @@
+import { Card, CardContent } from "@/components/ui/card";
+import { TrendingUp, TrendingDown, DollarSign, Users, ShoppingCart, Target } from "lucide-react";
+import { formatCurrency } from "@/lib/formatters";
+import { usePermissions } from "@/hooks/usePermissions";
+
+interface StatsCardsProps {
+  stats?: {
+    monthlyRevenue: number;
+    newLeads: number;
+    orders: number;
+    conversionRate: number;
+  };
+}
+
+export default function StatsCards({ stats }: StatsCardsProps) {
+  const { permissions } = usePermissions();
+
+  if (!stats) {
+    return (
+      <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
+        {[1, 2, 3, 4].map((i) => (
+          <Card key={i}>
+            <CardContent className="p-6">
+              <div className="animate-pulse space-y-3">
+                <div className="h-4 bg-gray-200 rounded w-1/2"></div>
+                <div className="h-8 bg-gray-200 rounded"></div>
+              </div>
+            </CardContent>
+          </Card>
+        ))}
+      </div>
+    );
+  }
+
+  const getCardTitle = (index: number) => {
+    if (permissions.canViewAllDashboard) {
+      return ["Doanh thu tháng", "Leads mới", "Đơn hàng", "Tỷ lệ chuyển đổi"][index];
+    } else if (permissions.canViewTeamDashboard) {
+      return ["Doanh thu đội", "Leads đội", "Đơn hàng đội", "Tỷ lệ chuyển đổi đội"][index];
+    } else {
+      return ["Doanh thu cá nhân", "Leads cá nhân", "Đơn hàng cá nhân", "Tỷ lệ chuyển đổi cá nhân"][index];
+    }
+  };
+
+  const getCardIcon = (index: number) => {
+    return [DollarSign, Users, ShoppingCart, Target][index];
+  };
+
+  const getCardValue = (index: number) => {
+    const values = [
+      formatCurrency(stats.monthlyRevenue),
+      stats.newLeads.toString(),
+      stats.orders.toString(),
+      `${stats.conversionRate}%`
+    ];
+    return values[index];
+  };
+
+  return (
+    <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
+      {[0, 1, 2, 3].map((index) => {
+        const Icon = getCardIcon(index);
+        return (
+          <Card key={index}>
+            <CardContent className="p-6">
+              <div className="flex items-center justify-between">
+                <div>
+                  <p className="text-sm font-medium text-gray-500">{getCardTitle(index)}</p>
+                  <h3 className="text-2xl font-bold mt-1">{getCardValue(index)}</h3>
+                </div>
+                <div className="h-12 w-12 rounded-full bg-blue-100 flex items-center justify-center">
+                  <Icon className="h-6 w-6 text-blue-600" />
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+        );
+      })}
+    </div>
+  );
+}

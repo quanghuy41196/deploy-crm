@@ -1,0 +1,366 @@
+Mô tả Giao diện Menu Sidebar và Dashboard (Desktop) - ViLead CRM (MVP)
+Giới thiệu
+Giao diện menu sidebar và dashboard trên desktop của ViLead CRM (MVP) được thiết kế để hỗ trợ đội sale bắt đầu ngày làm việc mới với các thông số cần thiết, giúp tối ưu hóa quản lý dịch vụ/phần mềm (không liên quan kho bãi/tồn kho). Sidebar gồm 8 mục chính: Tổng quan, Quản lý Leads, Theo dõi Leads, Khách hàng, Báo cáo, Marketing, Tích hợp, và Cài đặt (gộp AI Cơ bản), với chức năng tạo nhanh ở đầu sidebar và không có thông báo (badge). Dashboard hiển thị KPI, biểu đồ, thông báo AI, và hành động nhanh, tập trung vào leads, đơn hàng, và task để đội sale bắt đầu ngày làm việc hiệu quả. Header chứa thông báo chi tiết, hỗ trợ tiếng Việt, phân quyền cho Admin, CEO, Trưởng phòng sale, Sale, tích hợp Zalo OA, Facebook Fanpage (lead, tin nhắn), nhấn mạnh trạng thái hóa đơn (Đã thanh toán, Chưa thanh toán, Chờ hợp đồng), phù hợp SMEs/startup tại Việt Nam.
+1. Giao diện Menu Sidebar (Desktop)
+1.1. Cấu trúc Menu
+Sidebar gồm 8 mục chính, mục con tùy chỉnh theo vai trò, ưu tiên Quản lý Leads, Khách hàng ở trên, Cài đặt ở dưới. Không có badge thông báo, chức năng tạo nhanh ở đầu sidebar.
+
+
+
+Mục chính
+Biểu tượng
+Mô tả
+Mục con theo vai trò
+
+
+
+Tổng quan
+🏠
+KPI (doanh số, leads, đơn), biểu đồ.
+Sale: Dashboard cá nhânTrưởng phòng sale: Dashboard độiCEO: Dashboard công tyAdmin: Tất cả dashboard
+
+
+Quản lý Leads
+🧑‍🤝‍🧑
+Quản lý leads từ Zalo OA/Fanpage, tạo nhanh.
+Sale: Leads của tôi, Leads mớiTrưởng phòng sale: Leads của đội, Leads mớiCEO: Không truy cậpAdmin: Tất cả leads, Leads mới
+
+
+Theo dõi Leads
+💼
+Theo dõi tiến trình bán, dự đoán chốt deal (AI).
+Sale: Tiến trình của tôi, Tiến trình mớiTrưởng phòng sale: Tiến trình của đội, Tiến trình mớiCEO: Không truy cậpAdmin: Tất cả tiến trình, Tiến trình mới
+
+
+Khách hàng
+👥
+Thông tin, lịch sử tương tác, đơn hàng.
+Sale: Khách hàng của tôiTrưởng phòng sale: Khách hàng của độiCEO: Không truy cậpAdmin: Tất cả khách hàng
+
+
+Báo cáo
+📊
+Doanh số, hiệu suất sales, tỷ lệ chuyển đổi.
+Sale: Hiệu suất cá nhânTrưởng phòng sale: Hiệu suất đội, Quy trình bánCEO: Báo cáo công ty, KPIAdmin: Tất cả báo cáo, Báo cáo tùy chỉnh
+
+
+Marketing
+📣
+Chiến dịch email, tin nhắn Zalo/Fanpage, form leads.
+Sale: Không truy cậpTrưởng phòng sale: Chiến dịch, Leads từ MarketingCEO: Tổng quan chiến dịch, ROIAdmin: Tất cả chiến dịch, Leads từ Marketing
+
+
+Tích hợp
+🔌
+Quản lý Zalo OA, Fanpage, Gmail, Outlook, webhook.
+Sale: Không truy cậpTrưởng phòng sale: Xem trạng thái tích hợpCEO: Tổng quan tích hợpAdmin: Quản lý tích hợp
+
+
+Cài đặt
+⚙️
+Phân quyền, người dùng, bảo mật, quy trình, AI Cơ bản.
+Sale: Không truy cậpTrưởng phòng sale: Cài đặt đội, AI độiCEO: Cài đặt công ty, AI báo cáoAdmin: Quản lý người dùng, Cấu hình hệ thống, AI toàn bộ
+
+
+1.2. Thiết kế Sidebar
+
+Vị trí: Cố định bên trái, rộng 250px, nền xám nhạt (#F5F6FA), sạch sẽ, chuyên nghiệp (HubSpot).
+Biểu tượng: Material Icons, 24x24px, xanh đậm (#0052CC), ví dụ: 🏠, 🧑‍🤝‍🧑.
+Chữ: Font Roboto, 14px (mục chính), 12px (mục con), đen (#333333), tiếng Việt.
+Tương tác:
+Hover: Nền xanh nhạt (#E6F0FA), chữ đậm (Folk CRM).
+Click: Viền trái xanh đậm (#0052CC, 3px), nền xanh nhạt.
+Thu gọn: Nút “☰” (góc trên), sidebar còn 60px (biểu tượng), lưu trạng thái (Salesforce).
+Mục con: Thụt lề 10px, hiển thị khi click mục chính.
+
+
+Không thông báo: Loại bỏ badge, thông báo chuyển lên header.
+
+1.3. Phím Chức năng Nhanh trên Sidebar
+
+Tạo nhanh:
+Nút “+” đầu sidebar (xanh #0052CC, 32x32px), trên thanh tìm kiếm.
+Nhấn: Mở menu ngữ cảnh (rộng 200px, nền trắng #FFFFFF):
+“Tạo Leads”: Mở form nhập tên, số điện thoại, nguồn.
+“Tạo Đơn bán”: Mở form nhập khách, sản phẩm, giá.
+“Tạo Khách hàng”: Mở form nhập thông tin khách.
+“Tạo Task”: Mở form nhập tiêu đề, ngày hết hạn.
+
+
+Vai trò:
+Sale: Chỉ “Tạo Leads”, “Tạo Đơn bán”.
+Trưởng phòng sale/CEO/Admin: Tất cả tùy chọn.
+
+
+
+
+Tìm kiếm nhanh:
+Biểu tượng 🔍 dưới nút “+”, nhập tên mục/dữ liệu (ví dụ: “Leads”, “Đơn bán”).
+Kết quả: Danh sách mục (rộng 300px, nền trắng), nhấn mở (ví dụ: “Leads của tôi”).
+
+
+Phím tắt:
+“D” (Tổng quan), “L” (Quản lý Leads), “O” (Theo dõi Leads), “R” (Báo cáo).
+
+
+
+2. Giao diện Dashboard (Desktop)
+2.1. Cấu trúc Dashboard
+Dashboard là màn hình mặc định, tối ưu cho đội sale bắt đầu ngày làm việc, hiển thị thông số cần thiết:
+
+KPI: Leads mới, đơn mới, doanh số, task chưa hoàn thành.
+Biểu đồ: Doanh số, nguồn leads, tiến trình bán.
+Thông báo AI: Nhắc nhở leads không tương tác, đơn đứng lâu, gợi ý hành động.
+Hành động nhanh: Tạo leads, đơn, task, gửi tin Zalo/email.
+Danh sách ưu tiên: Leads mới, đơn Chưa thanh toán, task sắp hết hạn.
+
+2.2. Thông số Cần thiết cho Đội Sale
+
+KPI (4 thẻ):
+Leads mới hôm nay: Số leads từ Zalo OA/Fanpage (ví dụ: “5 leads”).
+Đơn mới hôm nay: Số đơn Chưa thanh toán, Chờ hợp đồng (ví dụ: “3 đơn”).
+Doanh số hôm nay: Tổng VNĐ từ đơn Đã thanh toán (ví dụ: “2 triệu VNĐ”).
+Task chưa hoàn thành: Số task cá nhân/đội (ví dụ: “4 task”).
+
+
+Biểu đồ (3 biểu đồ):
+Doanh số: Đường (doanh số 7 ngày), nhấn lọc theo sản phẩm (Gói tư vấn, SaaS).
+Nguồn leads: Tròn (Zalo OA 50%, Fanpage 30%, form 20%), nhấn xem chi tiết.
+Tiến trình bán: Phễu (Tư vấn 10 leads, Chốt Deal 3 leads), nhấn xem leads.
+
+
+Thông báo AI:
+Nhắc nhở: “Lead Nguyễn Văn A không tương tác 3 ngày” (liên kết Quản lý Leads).
+Gợi ý: “Gọi điện lead B, điểm cao 85/100” (liên kết Theo dõi Leads).
+Đơn đứng lâu: “Đơn #123 Chưa thanh toán 3 ngày” (liên kết Quản lý Leads).
+
+
+Hành động nhanh:
+Nút: “Tạo Leads”, “Tạo Đơn bán”, “Tạo Task”, “Gửi Tin Zalo”, “Gửi Email”.
+Danh sách:
+Leads mới: Tên, số điện thoại, nguồn, nhấn mở hồ sơ.
+Đơn Chưa thanh toán: Mã đơn, khách, giá, nhấn mở chi tiết.
+Task sắp hết hạn: Tiêu đề, ngày, nhấn cập nhật trạng thái.
+
+
+
+
+
+2.3. Thiết kế Dashboard
+
+Bố cục: Lưới 12 cột, 4 khu vực:
+KPI: Trên cùng, 4 thẻ trắng (#FFFFFF), viền xám (#E0E0E0), số liệu 24px, xanh đậm (#0052CC), mỗi thẻ rộng 3 cột.
+Biểu đồ: Giữa, 3 thẻ trắng, Chart.js, mỗi thẻ 4 cột, phóng to khi hover.
+Thông báo AI: Bên phải, danh sách cuộn (rộng 3 cột, cao 400px), thẻ cao 60px.
+Hành động nhanh: Dưới cùng, 5 nút xanh (#0052CC, 14px), bảng leads/đơn/task (rộng 12 cột, cuộn ngang).
+
+
+Màu sắc: Nền xám nhạt (#F5F6FA), thẻ trắng, chữ đen (#333333).
+Font: Roboto, 16px (tiêu đề), 14px (nội dung), tiếng Việt.
+Tương tác:
+KPI: Hover hiển thị tooltip (ví dụ: “Leads mới: Từ 00:00 hôm nay”).
+Biểu đồ: Nhấn lọc (ngày, nguồn), click điểm dữ liệu mở chi tiết.
+Thông báo AI: Nhấn thẻ mở mục liên quan (ví dụ: Lead A).
+Hành động nhanh: Nút nhấn mở form, bảng nhấn mở chi tiết.
+
+
+
+3. Phần Thông báo trên Header
+3.1. Cấu trúc và Nội dung
+
+Vị trí: Bên phải header, biểu tượng chuông 🔔 (24x24px, xám #666666), cạnh hồ sơ người dùng.
+Nội dung thông báo (theo vai trò, tối ưu cho đội sale):
+Sale:
+Leads mới: “Lead Nguyễn Văn A từ Zalo OA” (liên kết Quản lý Leads).
+Đơn Chưa thanh toán: “Đơn #123 đứng 3 ngày” (liên kết Quản lý Leads).
+Task sắp hết hạn: “Task gọi khách A hết hạn 16h” (liên kết Theo dõi Leads).
+Nhắc nhở AI: “Gửi tin Zalo cho lead B” (liên kết Theo dõi Leads).
+
+
+Trưởng phòng sale:
+Leads mới đội: “5 leads mới từ Fanpage” (liên kết Quản lý Leads).
+Hiệu suất đội: “Tỷ lệ chốt đội giảm 10%” (liên kết Báo cáo).
+Nhắc nhở AI: “3 leads đội không tương tác” (liên kết Theo dõi Leads).
+
+
+CEO:
+KPI công ty: “Doanh số hôm nay 10 triệu VNĐ” (liên kết Báo cáo).
+ROI marketing: “Chiến dịch Zalo ROI 150%” (liên kết Marketing).
+Nhắc nhở AI: “Báo cáo tự động sẵn sàng” (liên kết Báo cáo).
+
+
+Admin:
+Lỗi tích hợp: “Zalo OA mất kết nối” (liên kết Tích hợp).
+Trạng thái hệ thống: “3 người dùng đăng nhập lạ” (liên kết Cài đặt).
+Tất cả thông báo của Sale, Trưởng phòng, CEO.
+
+
+
+
+Loại thông báo:
+Khẩn cấp: Đỏ (#FF0000), ví dụ: Lỗi tích hợp, leads không tương tác >5 ngày.
+Quan trọng: Vàng (#FFC107), ví dụ: Đơn đứng lâu, task hết hạn.
+Thông thường: Xanh (#0052CC), ví dụ: Leads mới, báo cáo tự động.
+
+
+
+3.2. Cách Thể hiện
+
+Biểu tượng chuông: Xám (#666666), badge đỏ (số thông báo, ví dụ: “5”), nhấp nháy khi mới, lấy cảm hứng từ Salesforce.
+Nhấn chuông: Mở dropdown (rộng 350px, cao tối đa 400px, nền trắng #FFFFFF, viền xám #E0E0E0).
+Dropdown:
+Tiêu đề: “Thông báo” (16px, đen #333333, padding 10px).
+Danh sách: Thẻ thông báo (cao 60px, padding 8px), cuộn nếu >5 thẻ:
+Biểu tượng: Dấu chấm (8px, đỏ/vàng/xanh theo loại).
+Nội dung: Văn bản ngắn (14px, tối đa 100 ký tự, ví dụ: “Lead Nguyễn Văn A từ Zalo OA”).
+Thời gian: Góc phải (12px, xám #666666, ví dụ: “10 phút trước”).
+Hành động: Nút “Xem” (xanh #0052CC, 12px, viền tròn), liên kết mục (ví dụ: Quản lý Leads).
+
+
+Lọc: Nút 🔽 (góc trên, 14px): Lọc Khẩn cấp, Quan trọng, Thông thường, thời gian (Hôm nay, Tuần này).
+Xem thêm: Nút “Xem tất cả” (14px, xanh #0052CC) dưới cùng, mở trang Thông báo.
+
+
+Tương tác:
+Hover thẻ: Nền xanh nhạt (#E6F0FA), chữ đậm.
+Nhấn “Xem”: Mở mục liên quan (ví dụ: Hồ sơ lead A).
+Nhấn ngoài dropdown: Đóng dropdown.
+Nhấn “Xem tất cả”: Mở trang Thông báo (bảng đầy đủ, lọc nâng cao).
+
+
+Ví dụ hiển thị:
+Sale:
+“🔴 Lead Nguyễn Văn A từ Zalo OA, không tương tác 3 ngày. Xem” (10 phút trước).
+“🟡 Đơn #123 Chưa thanh toán, đứng 3 ngày. Xem” (1 giờ trước).
+“🟢 Lead Trần Thị B từ Fanpage. Xem” (30 phút trước).
+
+
+Trưởng phòng sale:
+“🟡 Tỷ lệ chốt đội giảm 10% hôm nay. Xem” (2 giờ trước).
+“🟢 5 leads mới từ Zalo OA. Xem” (1 giờ trước).
+
+
+CEO:
+“🟢 Doanh số hôm nay 10 triệu VNĐ. Xem” (1 giờ trước).
+“🟡 ROI chiến dịch Zalo 150%. Xem” (Hôm qua).
+
+
+Admin:
+“🔴 Zalo OA mất kết nối. Xem” (5 phút trước).
+“🟡 3 người dùng đăng nhập lạ. Xem” (1 giờ trước).
+
+
+
+
+
+4. Phím Chức năng Nhanh trên Header
+
+Bố cục:
+Trái: Logo ViLead (JPG/PNG, 150x50px), nhấn về Tổng quan.
+Giữa: Thanh tìm kiếm toàn cục (🔍, rộng 300px), tìm leads, đơn, khách, báo cáo.
+Phải:
+Biểu tượng chuông 🔔: Thông báo, badge đỏ.
+Nút “+” (xanh #0052CC, 32x32px): Tạo leads, đơn, task, khách.
+Hồ sơ người dùng (👤): Tên, vai trò, menu (Cài đặt cá nhân, Đăng xuất).
+
+
+
+
+Tương tác:
+Tìm kiếm: Nhập từ khóa (ví dụ: “Nguyễn Văn A”), kết quả danh sách (rộng 400px), nhấn mở.
+Nút “+”: Menu ngữ cảnh (rộng 200px, nền trắng):
+“Tạo Leads”, “Tạo Đơn bán”, “Tạo Khách hàng”, “Tạo Task”.
+Sale: Chỉ “Tạo Leads”, “Tạo Đơn bán”.
+
+
+Hồ sơ: Nhấn 👤 mở menu (Cài đặt cá nhân, Đăng xuất).
+
+
+Phím tắt:
+“S” (Tìm kiếm), “N” (Tạo mới), “B” (Thông báo).
+
+
+
+5. Tích hợp với Tính năng AI và Hệ thống
+
+AI Cơ bản (Trong Cài đặt):
+Mục con AI Cơ bản trong Cài đặt: Nhắc nhở, gợi ý, báo cáo, nội dung.
+Header: Thông báo AI (leads không tương tác, gợi ý hành động).
+Dashboard: KPI, biểu đồ, thông báo AI, hành động nhanh.
+
+
+Zalo OA/Fanpage:
+Sidebar, mục Tích hợp: Trạng thái kết nối (xanh/đỏ).
+Dashboard: Leads mới từ Zalo OA/Fanpage, nút gửi tin Zalo.
+Header: Thông báo leads từ Zalo/Fanpage.
+
+
+Bảo mật và Phân quyền:
+Sale: Tổng quan, Quản lý Leads, Theo dõi Leads, Khách hàng, Báo cáo cá nhân.
+Trưởng phòng sale: Thêm Báo cáo đội, Quy trình bán hàng, Marketing, Cài đặt đội.
+CEO: Tổng quan công ty, Báo cáo công ty, Marketing, Cài đặt công ty.
+Admin: Toàn quyền, bao gồm Quản lý người dùng, AI Cơ bản.
+
+
+
+6. Tham khảo từ CRM Khác
+
+Folk CRM (Eleken): Sidebar tối giản, dashboard KPI, ViLead áp dụng bố cục gọn, nút tạo nhanh.
+Salesforce (Salesforce): Sidebar phân quyền, dashboard KPI/biểu đồ, ViLead học phân quyền, thông báo header.
+HubSpot (HubSpot): Sidebar Deals, dashboard hành động nhanh, ViLead ưu tiên Quản lý Leads, Theo dõi Leads.
+Close CRM (Close): Sidebar sales-focused, thông báo header, ViLead áp dụng phím tắt, thông báo chi tiết.
+
+7. Tối ưu cho Thị trường Việt Nam
+
+Tiếng Việt: Nhãn, thông báo, tooltip bằng tiếng Việt, sửa lỗi chính tả (ví dụ: “khach” → “khách”).
+Hành vi người dùng: Dashboard ưu tiên leads, đơn, task, tích hợp Zalo OA/Fanpage, phù hợp thói quen Việt Nam.
+Đội sale: Thông số leads mới, đơn Chưa thanh toán, task hỗ trợ bắt đầu ngày làm việc.
+Phân quyền: Phù hợp doanh nghiệp Việt, Sale tập trung leads, Trưởng phòng quản lý đội, CEO xem chiến lược.
+
+Kết luận
+Giao diện menu sidebar và dashboard trên desktop của ViLead CRM (MVP) tối ưu cho đội sale, với sidebar 8 mục chính (Tổng quan, Quản lý Leads, Theo dõi Leads, Khách hàng, Báo cáo, Marketing, Tích hợp, Cài đặt), tạo nhanh đầu sidebar, không badge, và header có thông báo chi tiết (dropdown, lọc, hành động). Dashboard hiển thị KPI, biểu đồ, thông báo AI, hành động nhanh, tập trung leads, đơn, task để bắt đầu ngày làm việc. Giao diện trực quan, hỗ trợ tiếng Việt, tích hợp Zalo OA, Facebook Fanpage, phân quyền Admin, CEO, Trưởng phòng sale, Sale, phản ánh trạng thái hóa đơn, phù hợp SMEs/startup tại Việt Nam.
+
+
+
+Giải thích Tài liệu
+
+Tên: “Mô tả Giao diện Menu Sidebar và Dashboard (Desktop)”, phù hợp yêu cầu.
+Yêu cầu:
+Tập trung desktop, loại bỏ badge trên sidebar, đặt tạo nhanh đầu sidebar.
+Mô tả chi tiết thông báo trên header (dropdown, lọc, hành động).
+Dashboard hiển thị thông số cần thiết cho đội sale (leads, đơn, task).
+Gộp AI Cơ bản vào Cài đặt, giữ Quản lý Leads, Theo dõi Leads.
+Phân quyền 4 vai trò, tối ưu tiếng Việt, trạng thái hóa đơn.
+Tham khảo CRM toàn cầu (Folk, Salesforce, HubSpot, Close).
+Bỏ lợi ích/công nghệ, tập trung mô tả giao diện.
+
+
+Tích hợp: Zalo OA, Facebook Fanpage, Gmail/Outlook; AI trong Cài đặt.
+Dịch vụ/Phần mềm: Không kho bãi/tồn kho, tập trung trạng thái hóa đơn, dịch vụ/phần mềm.
+Giao diện:
+Sidebar: 8 mục, tạo nhanh đầu, không badge, tương tác hover/click.
+Dashboard: KPI, biểu đồ, thông báo AI, hành động nhanh, tối ưu đội sale.
+Header: Thanh tìm kiếm, thông báo (dropdown chi tiết), tạo mới, hồ sơ.
+
+
+Tối ưu Desktop: Lưới 12 cột, font Roboto, màu xám/xanh, responsive.
+Tiếng Việt: Nhãn, thông báo bằng tiếng Việt, sửa lỗi chính tả.
+Tham khảo: Folk (tối giản), Salesforce (phân quyền), HubSpot (dashboard), Close (thông báo).
+
+So sánh với Yêu cầu
+
+Tên: Phù hợp, nhấn mạnh desktop.
+Giao diện: Đáp ứng sidebar (tạo nhanh đầu, không badge), dashboard (thông số sale), header (thông báo chi tiết).
+Tính năng: Bao quát MVP, AI trong Cài đặt, tên Quản lý Leads, Theo dõi Leads.
+Tích hợp: Đáp ứng Zalo OA, Fanpage, Gmail/Outlook.
+Dịch vụ/Phần mềm: Đáp ứng, tập trung trạng thái hóa đơn.
+Bỏ Lợi ích/Công nghệ: Chỉ mô tả chức năng, không đề cập lợi ích hay công nghệ.
+MVP: Giao diện đơn giản, trực quan, phù hợp SMEs/startup.
+
+Hướng dẫn Sử dụng
+
+Quản lý sản phẩm: Xác định thiết kế sidebar/dashboard, ưu tiên thông số sale, thông báo header.
+Đội phát triển: Thiết kế giao diện, luồng tương tác, tích hợp Zalo/Fanpage.
+Khách hàng/Đối tác: Hiểu giao diện, hỗ trợ quản lý dịch vụ/phần mềm.
+
+Nếu cần mô tả giao diện khác (màn hình Leads, mobile), bổ sung định dạng (Word, PDF), hoặc mockup, hãy cho tôi biết!
